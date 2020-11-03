@@ -21,7 +21,7 @@ class Comida{
 
 const pechitoDeCerdo = new Comida(calorias =270,tipo = "carne",nombre = "pechito de cerdo")
 
-class Condicion{
+class Condicion{ // si esta clase no estuviese,entonces seria una interfaz de las condicionesComida
 	
 	method seLoPermite(comida)
 }

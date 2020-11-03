@@ -1,0 +1,92 @@
+import parcial.*
+import bandejas.*
+
+const sal = new Elemento(nombre = "sal")
+const aceite = new Elemento(nombre = "aceite")
+const vinagre = new Elemento(nombre = "vinagre")
+const aceto = new Elemento(nombre = "aceto")
+const oliva = new Elemento(nombre = "oliva")
+const cuchillo = new Elemento(nombre = "cuchillo")
+const cambio = new Elemento(nombre = "cambio")
+const ensalada = new Comida(calorias = 100,tipo = "verdura",nombre = "ensalada")
+const bandejaC = new Bandeja(comidaQueTiene = pechitoDeCerdo)
+const bandejaV = new Bandeja(comidaQueTiene = ensalada)
+
+test "una persona la pasa mal"{
+	vero.agregarElementoCercano(aceite)
+	vero.agregarElementoCercano(aceto)
+	vero.agregarElementoCercano(cuchillo)
+	vero.agregarElementoCercano(sal)
+	assert.equals(false,vero.laEstaPasandoBien())
+}
+
+test "una persona sorda le pasa un elemento a otra"{
+	vero.agregarElementoCercano(aceite)
+	vero.agregarElementoCercano(aceto)
+	vero.agregarElementoCercano(cuchillo)
+	vero.agregarElementoCercano(sal)
+	vero.agregarCriterio(sordo)
+	osky.agregarCriterio(pasaTodo)
+	osky.lePideA(vero,sal)
+	assert.equals([aceite],osky.elementosCercanos())
+}
+
+test "una persona pasa todos los elementos a otra"{
+	vero.agregarElementoCercano(aceite)
+	vero.agregarElementoCercano(aceto)
+	vero.agregarElementoCercano(cuchillo)
+	vero.agregarElementoCercano(sal)
+	vero.agregarCriterio(pasaTodo)
+	osky.agregarCriterio(sordo)
+	osky.lePideA(vero,sal)
+	assert.equals([aceite,aceto,cuchillo,sal],osky.elementosCercanos())
+}
+
+test " dos personas cambian de lugar"{
+	vero.agregarCriterio(pideCambio)
+	vero.cambiarPosicion(3)
+	osky.cambiarPosicion(1)
+	vero.lePideA(osky,cambio)
+	assert.equals(1,vero.posicion())
+}
+
+test " una persona vegetariana no come bandeja con carne"{
+	vero.agregarCriterioComida(vegetariano)
+	bandejaC.pasarBandeja(vero)
+	assert.equals([],vero.comidaConsumida())
+}
+
+test "una persona dietetica come la ensalada"{
+	vero.agregarCriterioComida(vegetariano)
+	bandejaV.pasarBandeja(vero)
+	assert.equals([ensalada],vero.comidaConsumida())
+}
+
+test "una persona alternada come carne"{
+	vero.agregarCriterioComida(alternado)
+	bandejaC.pasarBandeja(vero)
+	assert.equals([pechitoDeCerdo],vero.comidaConsumida())
+}
+
+test "una combinacion de condiciones con dietetico y vegetariano come la ensalada"{
+	const nuevaComb = new CombinacionCondiciones(listadoCondiciones = [vegetariano,dietetico])
+	vero.agregarCriterioComida(nuevaComb)
+	bandejaV.pasarBandeja(vero)
+	assert.equals([ensalada],vero.comidaConsumida())
+}
+
+/*
+ * el concepto de herencia se utilizo para las personas y criterios o elementos de los cuales voy a tener muchos y con
+ * criterios distintos ya que de  esta forma puedo crear dichos elementos respetando sus condiciones sin tener que 
+ * aplicar grandes cambios al codigo.La herencia tmb me permite agregar nuevas clases y condiciones rapida y facilmente
+ * 
+ * El concepto de polimorfismo se uso para los objetos como las condiciones ya que todas tienen que entender el mensaje
+ * de que le pasa pero devolver cosas distintas. Esto me permite tratar de forma distinta distintos objetos para 
+ * conseguir el resultado deseado.Tambien me permite agregar mas sin tener que cambiar el codigo ya que va a entender
+ * los mismos mensajes que los demas
+ * 
+ * El concepto de composicion se uso en la persona ya que los criterios y las condiciones que tiene son objetos que se
+ * usan para saber si permite comer algo o como va a reaccionar dicha persona ante un pedido de un elemento.La 
+ * composicion me permite rapidamente cambiar las caracteristicas de una persona sin modificar el codigo existente, y
+ * ante una nueva creacion de condiciones o caracteristicas no necesito cambiar el codigo que ya tengo.
+ */

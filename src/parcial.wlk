@@ -7,9 +7,22 @@ class Persona{
 	var criterioComida
 	var comidaConsumida = []
 	
+	method elementosCercanos() = elementosCercanos
+	
+	method comidaConsumida() = comidaConsumida
+	
 	method tomarPrimerCercano() = elementosCercanos.first()
+	
 	method pasaTodos(personaQuePide){
 		elementosCercanos.forEach({elemento => elemento.esPasado(self,personaQuePide)})
+	}
+	
+	method agregarCriterio(nuevoCriterio){
+		criterio = nuevoCriterio
+	}
+	
+	method agregarCriterioComida(nuevoCC){
+		criterioComida = nuevoCC
 	}
 	
 	method agregarElementoCercano(nuevoElemento){
@@ -42,7 +55,14 @@ class Persona{
 		}
 	} 
 	
-	method lePideA(personaQueDa,elementoPedido) = personaQueDa.recibePedidoDe(self,elementoPedido)
+	method lePideA(personaQueDa,elementoPedido){
+		if(elementoPedido.nombre() == "cambio"){
+			self.comoActuo(personaQueDa,elementoPedido) // si pide cambio no se fija que lo tenga en cercanos
+		}else{
+		 personaQueDa.recibePedidoDe(self,elementoPedido)
+		 
+		 }
+	}
 	
 	method quiereComer(comida){
 		if(criterioComida.seLoPermite(comida)){
@@ -83,15 +103,8 @@ class Elemento{
 	}
 }
 
-object sal inherits Elemento{}
-object aceite inherits Elemento{}
-object vinagre inherits Elemento{}
-object aceto inherits Elemento{}
-object oliva inherits Elemento{}
-object cuchillo inherits Elemento{}
-
-
-class Criterio{//interfaz
+class Criterio{ // si esta clase no estubiese, habria entonces una interfaz entre todos los ojetos condicion ya que todos entenderian el msg
+				// que le pasa
 	
 	method queLePasa(personaQueDa,personaQuePide,elementoPedido)
 
